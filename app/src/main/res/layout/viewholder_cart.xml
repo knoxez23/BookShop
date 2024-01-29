@@ -94,11 +94,11 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/plusCartItem"
+            app:layout_constraintEnd_toStartOf="@+id/plusCartBtn"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/plusCartItem"
+            android:id="@+id/plusCartBtn"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:background="@drawable/white_circle_background"
