@@ -29,7 +29,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.Viewholder> {
 
     public CartAdapter(ArrayList<PopularDomain> items, ChangeNumberItemsListener changeNumberItemsListener) {
         this.items = items;
-        managmentCart = new ManagmentCart(context);
         this.changeNumberItemsListener = changeNumberItemsListener;
     }
 
@@ -38,6 +37,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.Viewholder> {
     public CartAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         binding = ViewholderCartBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false);
         context = parent.getContext();
+        managmentCart = new ManagmentCart(context);
         return new Viewholder(binding);
     }
 
@@ -45,7 +45,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.Viewholder> {
     public void onBindViewHolder(@NonNull CartAdapter.Viewholder holder, int position) {
         binding.titleTxt.setText(items.get(position).getTitle());
         binding.feeEachItem.setText("Ksh" + items.get(position).getPrice());
-        binding.totalEachItem.setText("Ksh" + Math.round(items.get(position).getNumberInCart()*items.get(position).getPrice()));
+        binding.totalEachItem.setText("Ksh" + Math.round(items.get(position).getNumberInCart() * items.get(position).getPrice()));
         binding.numberItemTxt.setText(String.valueOf(items.get(position).getNumberInCart()));
 
         int drawableResource = holder.itemView.getResources().getIdentifier(items.get(position).getPicUrl(),

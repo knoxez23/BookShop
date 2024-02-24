@@ -2,18 +2,20 @@ package com.bookshop.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 
-import com.bookshop.Adapter.PopularAdapter;
-import com.bookshop.Domain.PopularDomain;
+import com.bookshop.Fragments.CartFragment;
+import com.bookshop.Fragments.HomeFragment;
+import com.bookshop.Fragments.ProfileFragment;
+import com.bookshop.Fragments.WishlistFragment;
 import com.bookshop.R;
 import com.bookshop.databinding.ActivityMainBinding;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
@@ -23,13 +25,26 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        replaceFragment(new HomeFragment());
+        binding.bottomNav.setBackground(null);
         statusBarColor();
-        initRecyclerView();
         bottomNavigation();
     }
 
     private void bottomNavigation() {
-        binding.cartBtn.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, CartActivity.class)));
+        binding.bottomNav.setOnItemSelectedListener( item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.explorer) {
+                replaceFragment(new HomeFragment());
+            } else if (itemId == R.id.wishlist) {
+                replaceFragment(new WishlistFragment());
+            } else if (itemId == R.id.cart) {
+                replaceFragment(new CartFragment());
+            } else if (itemId == R.id.profile) {
+                replaceFragment(new ProfileFragment());
+            }
+            return true;
+        });
     }
 
     private void statusBarColor() {
@@ -37,13 +52,10 @@ public class MainActivity extends AppCompatActivity {
         window.setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.purple_Dark));
     }
 
-    private void initRecyclerView() {
-        ArrayList<PopularDomain> items = new ArrayList<>();
-        items.add(new PopularDomain("Oxford Dictionary", "oxford_dic", 15, 4, 1500, "test"));
-        items.add(new PopularDomain("English Aid", "english_aid",10 , 4.5, 350,"English Aid 1 offers a wide range of features to support your language learning journey. From grammar rules to common phrases and expressions, this tool covers all the essential elements of English language proficiency. With clear explanations and examples, you'll quickly grasp the fundamentals of grammar and gain confidence in using the language correctly."));
-        items.add(new PopularDomain("Primary Mathematics", "primary_maths", 3, 4.9, 580, "This is the first book in the new series of Primary Mathematics written specifically for the competence-based curriculum. The coursebook is intended for use by Grade 1 learners. It prepares the learner for day to day living and number work in higher levels of schooling."));
-
-        binding.PopularView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
-        binding.PopularView.setAdapter(new PopularAdapter(items));
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 }
