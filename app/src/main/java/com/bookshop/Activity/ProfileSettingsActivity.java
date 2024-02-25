@@ -24,6 +24,6 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
     private void statusBarColor() {
         Window window = ProfileSettingsActivity.this.getWindow();
-        window.setStatusBarColor(ContextCompat.getColor(ProfileSettingsActivity.this, R.color.purple_Dark));
+        window.setStatusBarColor(ContextCompat.getColor(ProfileSettingsActivity.this, R.color.white));
     }
 }

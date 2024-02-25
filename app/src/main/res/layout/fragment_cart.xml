@@ -303,7 +303,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:background="@drawable/btn_background"
+                android:background="@drawable/purple_cool_background"
                 android:text="Order Now"
                 android:textColor="@color/white"
                 android:textSize="18sp" />

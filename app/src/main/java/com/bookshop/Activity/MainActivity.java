@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         replaceFragment(new HomeFragment());
         binding.bottomNav.setBackground(null);
-        statusBarColor();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.cool_purple_light));
         bottomNavigation();
     }
 
@@ -45,11 +45,6 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
-    }
-
-    private void statusBarColor() {
-        Window window = MainActivity.this.getWindow();
-        window.setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.purple_Dark));
     }
 
     private void replaceFragment(Fragment fragment) {

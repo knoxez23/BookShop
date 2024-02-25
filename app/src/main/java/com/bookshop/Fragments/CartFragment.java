@@ -39,14 +39,8 @@ public class CartFragment extends Fragment {
 
         initList();
         calculatorCart();
-        statusBarColor();
 
         return rootView;
-    }
-
-    private void statusBarColor() {
-        Window window = requireActivity().getWindow();
-        window.setStatusBarColor(ContextCompat.getColor(requireContext(), R.color.purple_Dark));
     }
 
     private void calculatorCart() {
