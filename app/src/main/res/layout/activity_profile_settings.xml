@@ -230,7 +230,7 @@
                 android:layout_marginTop="38dp"
                 android:layout_marginEnd="38dp"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/btn_background"
+                android:background="@drawable/purple_cool_background"
                 android:text="Log Out"
                 android:textColor="@color/white"
                 android:textSize="17sp" />

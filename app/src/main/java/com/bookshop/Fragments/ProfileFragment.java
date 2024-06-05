@@ -1,18 +1,23 @@
 package com.bookshop.Fragments;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.bookshop.Activity.ProfileSettingsActivity;
 import com.bookshop.Adapter.PopularAdapter;
 import com.bookshop.Domain.PopularDomain;
+import com.bookshop.R;
 import com.bookshop.databinding.FragmentProfileBinding;
 
 import java.util.ArrayList;
@@ -39,6 +44,7 @@ public class ProfileFragment extends Fragment {
         });
 
         initRecyclerView();
+
         return rootView;
     }
 

@@ -63,6 +63,19 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/backBtn" />
 
+<!--                <ProgressBar-->
+<!--                    android:id="@+id/progressBarDetail"-->
+<!--                    style="?android:attr/progressBarStyleHorizontal"-->
+<!--                    android:indeterminateDrawable="@drawable/custom_progressbar"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    android:layout_marginEnd="16dp"-->
+<!--                    app:layout_constraintEnd_toEndOf="@+id/view2"-->
+<!--                    app:layout_constraintStart_toStartOf="@+id/view2"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    tools:visibility="gone" />-->
+
                 <ImageView
                     android:id="@+id/itemPic"
                     android:layout_width="0dp"
@@ -73,6 +86,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/view2"
                     app:layout_constraintStart_toStartOf="@+id/view2"
                     app:layout_constraintTop_toTopOf="@+id/view2" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
@@ -203,7 +217,7 @@
                 android:layout_marginBottom="32dp"
                 android:background="@drawable/btn_background2"
                 android:text="ADD TO CART"
-                android:textColor="@color/purple_light"
+                android:textColor="@color/blue_grey"
                 android:textSize="16sp" />
         </LinearLayout>
     </ScrollView>

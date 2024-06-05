@@ -2,27 +2,23 @@ package com.bookshop.Fragments;
 
 import android.os.Bundle;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 
 import com.bookshop.Adapter.CartAdapter;
 import com.bookshop.Helper.ChangeNumberItemsListener;
-import com.bookshop.Helper.ManagmentCart;
-import com.bookshop.R;
+import com.bookshop.Helper.ManagementCart;
 import com.bookshop.databinding.FragmentCartBinding;
-
 
 public class CartFragment extends Fragment {
 
-    private ManagmentCart managmentCart;
-    FragmentCartBinding binding;
-    double tax;
+    private ManagementCart managementCart;
+    private FragmentCartBinding binding;
+    private double tax;
 
     public CartFragment() {
         // Required empty public constructor
@@ -35,27 +31,21 @@ public class CartFragment extends Fragment {
         binding = FragmentCartBinding.inflate(inflater, container, false);
         View rootView = binding.getRoot();
 
-        managmentCart = new ManagmentCart(getContext());
+        managementCart = new ManagementCart(getContext());
 
         initList();
         calculatorCart();
-        statusBarColor();
 
         return rootView;
-    }
-
-    private void statusBarColor() {
-        Window window = requireActivity().getWindow();
-        window.setStatusBarColor(ContextCompat.getColor(requireContext(), R.color.purple_Dark));
     }
 
     private void calculatorCart() {
         double percentTax = 0.02;
         double delivery = 10;
-        tax = Math.round(managmentCart.getTotalFee() * percentTax * 100) / 100;
+        tax = Math.round(managementCart.getTotalFee() * percentTax * 100) / 100;
 
-        double total = Math.round((managmentCart.getTotalFee() + tax + delivery) * 100) / 100;
-        double itemTotal = Math.round(managmentCart.getTotalFee() * 100) / 100;
+        double total = Math.round((managementCart.getTotalFee() + tax + delivery) * 100) / 100;
+        double itemTotal = Math.round(managementCart.getTotalFee() * 100) / 100;
         binding.totalFeeTxt.setText("Ksh" + itemTotal);
         binding.taxTxt.setText("Ksh" + tax);
         binding.deliveryTxt.setText("Ksh" + delivery);
@@ -63,7 +53,7 @@ public class CartFragment extends Fragment {
     }
 
     private void initList() {
-        if(managmentCart.getListCart().isEmpty()) {
+        if (managementCart.getListCart().isEmpty()) {
             binding.emptyTxt.setVisibility(View.VISIBLE);
             binding.scroll.setVisibility(View.GONE);
         } else {
@@ -72,17 +62,17 @@ public class CartFragment extends Fragment {
         }
 
         binding.cartView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-        binding.cartView.setAdapter(new CartAdapter(managmentCart.getListCart(), new ChangeNumberItemsListener() {
+        binding.cartView.setAdapter(new CartAdapter(managementCart.getListCart(), new ChangeNumberItemsListener() {
             @Override
             public void change() {
                 calculatorCart();
             }
-        }));
+        }, getContext()));
     }
 
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         binding = null;
     }
 }

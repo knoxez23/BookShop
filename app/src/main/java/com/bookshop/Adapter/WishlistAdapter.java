@@ -1,69 +1,52 @@
 package com.bookshop.Adapter;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bookshop.Activity.DetailActivity;
 import com.bookshop.Domain.PopularDomain;
-import com.bookshop.databinding.ViewholderWishlistBinding;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.GranularRoundedCorners;
+import com.bookshop.Helper.TinyDB;
+import com.bookshop.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class WishlistAdapter  extends RecyclerView.Adapter<WishlistAdapter.Viewholder> {
-    ArrayList<PopularDomain> items;
-    Context context;
-    ViewholderWishlistBinding binding;
+public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHolder> {
 
-    public WishlistAdapter(ArrayList<PopularDomain> items) {
-        this.items = items;
+    private final List<PopularDomain> wishlistItems;
+    private final TinyDB tinyDB;
+
+    public WishlistAdapter(List<PopularDomain> wishlistItems, TinyDB tinyDB) {
+        this.wishlistItems = wishlistItems;
+        this.tinyDB = tinyDB;
     }
 
     @NonNull
     @Override
-    public WishlistAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        binding = ViewholderWishlistBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false);
-        context = parent.getContext();
-        return new WishlistAdapter.Viewholder(binding);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_wishlist, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WishlistAdapter.Viewholder holder, int position) {
-        binding.titleTxt.setText(items.get(position).getTitle());
-        binding.feeTxt.setText("Ksh" + items.get(position).getPrice());
-        binding.scoreTxt.setText("" + items.get(position).getScore());
-        binding.reviewTxt.setText("" + items.get(position).getReview());
-
-        int drawableResource = holder.itemView.getResources().getIdentifier(items.get(position).getPicUrl(),
-                "drawable",holder.itemView.getContext().getPackageName());
-
-        Glide.with(context)
-                .load(drawableResource)
-                .transform(new GranularRoundedCorners(30, 30, 0, 0))
-                .into(binding.pic);
-
-
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, DetailActivity.class);
-            intent.putExtra("object", items.get(position));
-            context.startActivity(intent);
-        });
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        PopularDomain item = wishlistItems.get(position);
+        // Bind item data to ViewHolder views
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return wishlistItems.size();
     }
 
-    public class Viewholder extends RecyclerView.ViewHolder {
-        public Viewholder(ViewholderWishlistBinding binding) {
-            super(binding.getRoot());
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        // Declare ViewHolder views here
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            // Initialize ViewHolder views here
         }
     }
 }
