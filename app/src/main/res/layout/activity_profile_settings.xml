@@ -233,7 +233,8 @@
                 android:background="@drawable/purple_cool_background"
                 android:text="Log Out"
                 android:textColor="@color/white"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

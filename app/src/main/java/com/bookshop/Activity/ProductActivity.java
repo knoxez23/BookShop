@@ -38,6 +38,7 @@ public class ProductActivity extends AppCompatActivity {
             Intent intent = new Intent(ProductActivity.this, MainActivity.class);
             intent.putExtra("fragment", "cart");
             startActivity(intent);
+            finish();
         });
         
         Intent intent = getIntent();
@@ -60,6 +61,12 @@ public class ProductActivity extends AppCompatActivity {
                 getProducts();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     private void performSearch(String searchText) {

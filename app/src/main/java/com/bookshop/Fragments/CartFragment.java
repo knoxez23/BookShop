@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bookshop.Activity.MainActivity;
 import com.bookshop.Adapter.CartAdapter;
 import com.bookshop.Helper.ChangeNumberItemsListener;
 import com.bookshop.Helper.ManagementCart;
 import com.bookshop.databinding.FragmentCartBinding;
+
+import java.util.Objects;
 
 public class CartFragment extends Fragment {
 
@@ -32,6 +35,10 @@ public class CartFragment extends Fragment {
         View rootView = binding.getRoot();
 
         managementCart = new ManagementCart(getContext());
+
+        MainActivity activity = (MainActivity) getActivity();
+        assert activity != null;
+        Objects.requireNonNull(activity.getSupportActionBar()).setTitle("Cart");
 
         initList();
         calculatorCart();

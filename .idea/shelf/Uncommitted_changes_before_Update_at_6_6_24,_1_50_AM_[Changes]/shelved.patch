@@ -1,0 +1,10 @@
+Index: .idea/.gitignore
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+deleted file mode 100644
+--- a/.idea/.gitignore	(revision 38f194968e41b050560926da4e2942c00505387b)
++++ /dev/null	(revision 38f194968e41b050560926da4e2942c00505387b)
+@@ -1,3 +0,0 @@
+-# Default ignored files
+-/shelf/
+-/workspace.xml

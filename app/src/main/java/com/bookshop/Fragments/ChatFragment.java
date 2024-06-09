@@ -1,33 +1,30 @@
 package com.bookshop.Fragments;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 
+import com.bookshop.Activity.MainActivity;
 import com.bookshop.Activity.ProfileSettingsActivity;
 import com.bookshop.Adapter.PopularAdapter;
 import com.bookshop.Domain.PopularDomain;
-import com.bookshop.R;
-import com.bookshop.databinding.FragmentProfileBinding;
+import com.bookshop.databinding.FragmentChatBinding;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
-public class ProfileFragment extends Fragment {
+public class ChatFragment extends Fragment {
 
-    FragmentProfileBinding binding;
+    FragmentChatBinding binding;
 
-    public ProfileFragment() {
+    public ChatFragment() {
         // Required empty public constructor
     }
 
@@ -35,13 +32,17 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentProfileBinding.inflate(inflater, container, false);
+        binding = FragmentChatBinding.inflate(inflater, container, false);
         View rootView = binding.getRoot();
 
         binding.settings.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), ProfileSettingsActivity.class);
             startActivity(intent);
         });
+
+        MainActivity activity = (MainActivity) getActivity();
+        assert activity != null;
+        Objects.requireNonNull(activity.getSupportActionBar()).setTitle("Chat");
 
         initRecyclerView();
 

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F3F3F3"
-    tools:context=".Fragments.ProfileFragment">
+    android:paddingTop="50dp"
+    tools:context=".Fragments.ChatFragment">
 
     <ScrollView
         android:layout_width="match_parent"
