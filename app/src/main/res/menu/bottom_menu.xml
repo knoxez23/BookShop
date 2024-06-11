@@ -12,9 +12,9 @@
         android:icon="@drawable/favorite"/>
 
     <item
-        android:id="@+id/fab"
-        android:title=""
-        android:enabled="false"/>
+        android:id="@+id/upload"
+        android:title="Upload"
+        android:icon="@drawable/upload"/>
 
     <item
         android:id="@+id/cart"
@@ -22,7 +22,7 @@
         android:icon="@drawable/cart"/>
 
     <item
-        android:id="@+id/profile"
+        android:id="@+id/chat"
         android:title="Chat"
         android:icon="@drawable/chat"/>
 

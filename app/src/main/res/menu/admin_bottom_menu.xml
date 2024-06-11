@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/products"
+        android:title="Products"
+        android:icon="@drawable/compass"/>
 
+    <item
+        android:id="@+id/orders"
+        android:title="Orders"
+        android:icon="@drawable/orders"/>
+
+
+    <item
+        android:id="@+id/users"
+        android:title="Users"
+        android:icon="@drawable/users"/>
+
+    <item
+        android:id="@+id/chat"
+        android:title="Chat"
+        android:icon="@drawable/chat"/>
 </menu>

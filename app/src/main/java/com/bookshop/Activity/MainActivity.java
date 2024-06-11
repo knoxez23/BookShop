@@ -18,8 +18,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bookshop.Fragments.CartFragment;
@@ -31,6 +33,8 @@ import com.bookshop.databinding.ActivityMainBinding;
 import com.bookshop.databinding.InfoPopupBinding;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String PREFS_NAME = "MyPrefs";
@@ -39,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     ActivityMainBinding binding;
     FirebaseAuth mAuth;
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +50,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
-        mAuth=  FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         setSupportActionBar(toolbar);
 
@@ -60,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        fetchAndDisplayUserName();
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new HomeFragment()).commit();
@@ -110,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -120,6 +124,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void fetchAndDisplayUserName() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userName;
+
+        if (user != null) {
+            userName = user.getDisplayName(); // Fetch and display name
+            if (userName == null || userName.isEmpty()) {
+                userName = user.getEmail(); // If display name is not set, fall back to email
+            }
+        } else {
+            userName = "Guest"; // If user is not logged in, set to "Guest"
+        }
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView loggedInUserTextView = headerView.findViewById(R.id.loggedInUser);
+        loggedInUserTextView.setText(userName);
+    }
+
     private void performSearch(String searchText) {
         // Start the ProductActivity and pass the search text as an extra
         Intent intent = new Intent(this, ProductActivity.class);
@@ -169,11 +193,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 replaceFragment(new WishlistFragment());
             } else if (itemId == R.id.cart) {
                 replaceFragment(new CartFragment());
-            } else if (itemId == R.id.profile) {
-                replaceFragment(new ChatFragment());
+            } else if (itemId == R.id.chat) {
+                fetchAndPassUserId();
             }
             return true;
         });
+    }
+
+    private void fetchAndPassUserId() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("users").document(uid).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    String userId = task.getResult().getString("id");
+                    if (userId != null) {
+                        Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                        intent.putExtra("userId", userId);
+                        startActivity(intent);
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Failed to fetch user ID", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void replaceFragment(Fragment fragment) {

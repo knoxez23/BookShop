@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
@@ -35,19 +36,23 @@ public class LoginActivity extends BaseActivity {
 
     private void setOnClick() {
         binding.loginBtn.setOnClickListener(v -> {
+            binding.progressBarLogin.setVisibility(View.VISIBLE);
             String email = binding.userEdt.getText().toString();
             String password = binding.passwordEdt.getText().toString();
 
             if (!email.isEmpty() && !password.isEmpty()) {
                 mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, task -> {
                     if (task.isSuccessful()) {
+                        binding.progressBarLogin.setVisibility(View.GONE);
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     } else {
+                        binding.progressBarLogin.setVisibility(View.GONE);
                         Toast.makeText(LoginActivity.this, "Authentication failed!", Toast.LENGTH_SHORT).show();
                     }
                 });
             } else {
+                binding.progressBarLogin.setVisibility(View.GONE);
                 Toast.makeText(LoginActivity.this, "Please fill in both email and password", Toast.LENGTH_SHORT).show();
             }
         });
