@@ -11,14 +11,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -26,7 +32,6 @@ import android.widget.Toast;
 
 import com.bookshop.Fragments.CartFragment;
 import com.bookshop.Fragments.HomeFragment;
-import com.bookshop.Fragments.ChatFragment;
 import com.bookshop.Fragments.WishlistFragment;
 import com.bookshop.R;
 import com.bookshop.databinding.ActivityMainBinding;
@@ -83,10 +88,76 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding.bottomNav.setBackground(null);
         getWindow().setStatusBarColor(getResources().getColor(R.color.cool_purple_light));
         bottomNavigation();
+        bottomSheetDialog();
 
         if (shouldShowPopup()) {
             binding.getRoot().post(this::FileUploadPopup);
         }
+
+    }
+
+    private void bottomSheetDialog() {
+        View upload = findViewById(R.id.upload);
+        upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBottomDialog();
+            }
+
+            private void showBottomDialog() {
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.bottom_sheet_layout);
+
+                LinearLayout uploadList = dialog.findViewById(R.id.uploadList);
+                LinearLayout createList = dialog.findViewById(R.id.createList);
+                LinearLayout makeCall = dialog.findViewById(R.id.makeCall);
+                ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+
+                uploadList.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        dialog.dismiss();
+                        Toast.makeText(MainActivity.this,"Upload a Video is clicked",Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                createList.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        dialog.dismiss();
+                        Toast.makeText(MainActivity.this,"Create a short is Clicked",Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                makeCall.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        dialog.dismiss();
+                        Toast.makeText(MainActivity.this,"Go live is Clicked",Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                dialog.getWindow().setGravity(Gravity.BOTTOM);
+            }
+        });
     }
 
     @Override
