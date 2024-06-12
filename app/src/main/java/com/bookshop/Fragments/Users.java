@@ -1,60 +1,38 @@
 package com.bookshop.Fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bookshop.Helper.UserActionListener;
+import com.bookshop.Adapter.UsersAdapter;
+import com.bookshop.Models.UserModel;
 import com.bookshop.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Users#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class Users extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private FirebaseFirestore db;
+    private RecyclerView usersRecyclerView;
+    private UsersAdapter usersAdapter;
+    private List<UserModel> userModelList;
+    private String currentUserId;
 
     public Users() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Users.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Users newInstance(String param1, String param2) {
-        Users fragment = new Users();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -62,5 +40,68 @@ public class Users extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_users, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db = FirebaseFirestore.getInstance();
+
+        usersRecyclerView = view.findViewById(R.id.users_recycler_view);
+        userModelList = new ArrayList<>();
+        usersAdapter = new UsersAdapter(getContext(), userModelList, new UserActionListener() {
+            @Override
+            public void onViewDetails(UserModel userModel) {
+                showUserDetails(userModel);
+            }
+
+            @Override
+            public void onDeleteUser(UserModel userModel) {
+                deleteUser(userModel);
+            }
+        });
+
+        usersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        usersRecyclerView.setAdapter(usersAdapter);
+
+        loadUsers();
+    }
+
+    private void loadUsers() {
+        db.collection("users").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                userModelList.clear();
+                for (QueryDocumentSnapshot doc : task.getResult()) {
+                    String userId = doc.getId();
+                    if (!userId.equals(currentUserId)) {
+                        UserModel userModel = doc.toObject(UserModel.class);
+                        userModel.setId(userId);
+                        userModelList.add(userModel);
+                    }
+                }
+                usersAdapter.notifyDataSetChanged();
+            } else {
+                Toast.makeText(getContext(), "Failed to load users", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showUserDetails(UserModel userModel) {
+        // Implement functionality to show user details
+        Toast.makeText(getContext(), "User: " + userModel.getUsername(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void deleteUser(UserModel userModel) {
+        db.collection("users").document(userModel.getId()).delete().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(getContext(), "User deleted", Toast.LENGTH_SHORT).show();
+                userModelList.remove(userModel);
+                usersAdapter.notifyDataSetChanged();
+            } else {
+                Toast.makeText(getContext(), "Failed to delete user", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
